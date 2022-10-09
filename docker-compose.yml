@@ -1,0 +1,81 @@
+version: "3.7"
+services:
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+    - PUID=1000
+    - PGID=1000
+    volumes:
+    - /mongodb/database:/data/db
+    ports:
+    - 27017:27017
+    healthcheck:
+      test:  echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  migration:
+    build: .
+    image: mongo
+    volumes:
+    - /mongodb/database:/data/db
+    command:  ["sh", "./chargeBDD.sh"]
+    links:
+      - mongodb
+    depends_on:
+      - mongodb  
+
+      
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    environment:
+    - ME_CONFIG_MONGODB_SERVER=mongodb
+    - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+    - ME_CONFIG_BASICAUTH_USERNAME=admin
+    - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+    volumes:
+    - mongodb-data
+    depends_on:
+    - mongodb
+
+    ports:
+    - 8081:8081
+    healthcheck:
+      test:  wget --quiet --tries=3 --spider http://admin:admin123@localhost:8081 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    volumes:
+    - /mongodb/database:/data/db
+
+  express: 
+    build: back
+    container_name: express
+    environment: 
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_USER=admin
+      - MONGO_PASSWORD=admin123
+      - MONGO_DATABASE=database-geotrace
+    ports: 
+      - 3000:3000
+
+  react:
+    build: front
+    container_name: react
+    environment: 
+      - REACT_APP_API_URL=express
+    ports: 
+      - 80:3000
+
+
+
+
+    
+    
+
