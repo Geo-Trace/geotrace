@@ -1,9 +1,9 @@
 [submodule "front"]
 	path = front
-	url = git@github.com:Geo-Trace/front-geotrace.git
+	url = https://github.com/Geo-Trace/front-geotrace.git
 [submodule "back"]
 	path = back
-	url = git@github.com:Geo-Trace/back-geotrace.git
+	url = https://github.com/Geo-Trace/back-geotrace.git
 [submodule "database"]
 	path = database
-	url = git@github.com:Geo-Trace/database-geotrace.git
+	url = https://github.com/Geo-Trace/database-geotrace.git
