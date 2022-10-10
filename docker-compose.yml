@@ -19,15 +19,15 @@ services:
     restart: unless-stopped
 
   migration:
-    build: .
     image: mongo
     volumes:
     - ./mongodb/database:/data/db
-    command:  ["sh", "./chargeBDD.sh"]
+    - ./database/itineraire.json:/itineraire.json
+    command: mongoimport --host mongodb --db database-geotrace --collection itineraire  --file /itineraire.json --jsonArray
     links:
       - mongodb
     depends_on:
-      - mongodb  
+      - mongodb   
 
       
   mongo-express:
@@ -38,8 +38,6 @@ services:
     - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
     - ME_CONFIG_BASICAUTH_USERNAME=admin
     - ME_CONFIG_BASICAUTH_PASSWORD=admin123
-    volumes:
-    - mongodb-data
     depends_on:
     - mongodb
     ports:
