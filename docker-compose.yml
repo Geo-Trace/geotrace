@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+
   mongodb:
     image : mongo
     container_name: mongodb
@@ -7,7 +8,7 @@ services:
     - PUID=1000
     - PGID=1000
     volumes:
-    - /mongodb/database:/data/db
+    - ./mongodb/database:/data/db
     ports:
     - 27017:27017
     healthcheck:
@@ -21,7 +22,7 @@ services:
     build: .
     image: mongo
     volumes:
-    - /mongodb/database:/data/db
+    - ./mongodb/database:/data/db
     command:  ["sh", "./chargeBDD.sh"]
     links:
       - mongodb
@@ -41,7 +42,6 @@ services:
     - mongodb-data
     depends_on:
     - mongodb
-
     ports:
     - 8081:8081
     healthcheck:
@@ -51,7 +51,7 @@ services:
       retries: 3
     restart: unless-stopped
     volumes:
-    - /mongodb/database:/data/db
+    - ./mongodb/database:/data/db
 
   express: 
     build: back
@@ -72,6 +72,7 @@ services:
       - REACT_APP_API_URL=express
     ports: 
       - 80:3000
+      
   prometheus:
     image: prom/prometheus
     container_name: prometheus
