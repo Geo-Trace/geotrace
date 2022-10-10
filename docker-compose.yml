@@ -23,7 +23,7 @@ services:
     image: mongo
     volumes:
     - ./mongodb/database:/data/db
-    command:  ["sh", "./chargeBDD.sh"]
+    command:  ["sh", "./database/chargeBDD.sh"]
     links:
       - mongodb
     depends_on:
@@ -71,7 +71,7 @@ services:
     environment: 
       - REACT_APP_API_URL=express
     ports: 
-      - 80:3000
+      - 8080:3000
       
   prometheus:
     image: prom/prometheus
@@ -85,10 +85,13 @@ services:
     image:  grafana/grafana-oss:9.1.7-ubuntu
     container_name: grafana
     volumes:
-      - ./grafana-storage:/var/lib/grafana
+      
+      - grafana-storage:/var/lib/grafana
     ports: 
       - 4000:3000
     
+volumes: 
+  grafana-storage:
 
 
 
