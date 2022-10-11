@@ -13,7 +13,7 @@ provider "azurerm" {
     }
     
 resource "azurerm_resource_group" "geotrace" {
-    name = "formation_Phil"
+    name = "geotrace"
     location = "France Central"   
 }
     

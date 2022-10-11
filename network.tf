@@ -24,7 +24,6 @@ resource "azurerm_public_ip" "IP_publique" {
 }
 
 resource "azurerm_network_interface" "ubuntu-nic" {
-    # formatage du nom de la carte RSO, avec le count indiqué dans la création de la VM
   name                = "ubuntu-nic"
   location            = azurerm_resource_group.geotrace.location
   resource_group_name = azurerm_resource_group.geotrace.name
@@ -36,19 +35,6 @@ resource "azurerm_network_interface" "ubuntu-nic" {
     public_ip_address_id = azurerm_public_ip.IP_publique.id
   }
 }
-
-# version manuelle: 2 VM
-# resource "azurerm_network_interface" "ubuntu-nic2" {
-#   name                = "ubuntu-nic2"
-#   location            = azurerm_resource_group.geotrace.location
-#   resource_group_name = azurerm_resource_group.geotrace.name
-
-#   ip_configuration {
-#     name                          = "ip-config2"
-#     subnet_id                     = azurerm_subnet.ubuntu-subnet.id
-#     private_ip_address_allocation = "Dynamic"
-#   }
-# }
 
 resource "azurerm_network_security_group" "secugroup-geotrace" {
   name                = "secugroup-geotrace"
@@ -66,7 +52,6 @@ resource "azurerm_network_security_group" "secugroup-geotrace" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
-
   tags = {
     environment = "Production"
   }
@@ -74,12 +59,5 @@ resource "azurerm_network_security_group" "secugroup-geotrace" {
 
 resource "azurerm_subnet_network_security_group_association" "association_SG" {
   subnet_id                 = azurerm_subnet.ubuntu-subnet.id
-  network_interface_id      = azurerm_network_interface.ubuntu-nic.id
   network_security_group_id = azurerm_network_security_group.secugroup-geotrace.id
-}
-
-
-
-output "azurerm_public_ip" {
-  value = azurerm_public_ip.IP_publique
 }

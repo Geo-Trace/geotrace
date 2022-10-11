@@ -3,7 +3,7 @@ resource "azurerm_linux_virtual_machine" "ubuntu-vm" {
   resource_group_name = azurerm_resource_group.geotrace.name
   location            = azurerm_resource_group.geotrace.location
   size                = "Standard_B1s"
-  admin_username      = "admin"
+  admin_username      = "admin123"
   disable_password_authentication = true
   network_interface_ids = [
     #nom de l'interface déclarée ligne 15 dans network.tf
@@ -11,7 +11,7 @@ resource "azurerm_linux_virtual_machine" "ubuntu-vm" {
   ]
 
   admin_ssh_key {
-    username = "admin"
+    username = "admin123"
     # si on met public_key = file(~/.ssh)
     public_key = tls_private_key.SSH_key.public_key_openssh #The magic here
   }
