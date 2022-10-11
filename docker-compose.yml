@@ -83,10 +83,13 @@ services:
     image:  grafana/grafana-oss:9.1.7-ubuntu
     container_name: grafana
     volumes:
-      - ./grafana-storage:/var/lib/grafana
+      
+      - grafana-storage:/var/lib/grafana
     ports: 
       - 4000:3000
     
+volumes: 
+  grafana-storage:
 
 
 
