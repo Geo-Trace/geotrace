@@ -59,6 +59,5 @@ resource "azurerm_network_security_group" "secugroup-geotrace" {
 
 resource "azurerm_subnet_network_security_group_association" "association_SG" {
   subnet_id                 = azurerm_subnet.ubuntu-subnet.id
-  network_interface_id      = azurerm_network_interface.ubuntu-nic.id
   network_security_group_id = azurerm_network_security_group.secugroup-geotrace.id
 }
